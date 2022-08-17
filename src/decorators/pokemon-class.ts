@@ -10,7 +10,13 @@ const conditionalPrint = (print: boolean = false): Function => {
   }
 }
 
-@conditionalPrint()
+const blockPrototype = (constructor: Function) => {
+  Object.seal(constructor);
+  Object.seal(constructor.prototype);
+}
+
+@blockPrototype
+@conditionalPrint(true)
 export class Pokemon {
   public api: string = 'https://pokeapi.co/api/v2/pokemon/';
 
