@@ -27,19 +27,39 @@ function CheckValidPokemonId() {
         throw new Error('Invalid pokemon id');
       }
       return originalMethod(pokemonId);
-    }
+    };
+  };
+}
+
+function readonly(isWritable: boolean = true): Function {
+  return function (target: any, propertyKey: string) {
+    const descriptor: PropertyDescriptor = {
+      get() {
+        // console.log(this);
+        return 'Nato';
+      },
+      set(this: any, value: string) {
+        // console.log(this);
+        Object.defineProperty(this, propertyKey, {
+          value: value,
+          writable: !isWritable,
+        })
+      },
+    };
+    return descriptor;
   };
 }
 
 @blockPrototype
-@conditionalPrint(true)
+@conditionalPrint(false)
 export class Pokemon {
+  @readonly(true)
   public api: string = 'https://pokeapi.co/api/v2/pokemon/';
 
   constructor(public name: string) {}
 
   @CheckValidPokemonId()
-  savePokemonToDB( id: number ) {
+  savePokemonToDB(id: number) {
     console.log('Saving ' + id + ' to DB...');
   }
 }
